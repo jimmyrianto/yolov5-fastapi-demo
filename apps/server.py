@@ -69,7 +69,8 @@ def detect_with_server_side_rendering(request: Request,
     '''
 
     if model_dict[model_name] is None:
-        model_dict[model_name] = torch.hub.load('ultralytics/yolov5', model_name, pretrained=True)
+        # model_dict[model_name] = torch.hub.load('ultralytics/yolov5', model_name, pretrained=True)
+        model_dict[model_name] = torch.hub.load('ultralytics/yolov5', 'custom', path='/apps/best.pt')
 
     img_batch = [cv2.imdecode(np.fromstring(file.file.read(), np.uint8), cv2.IMREAD_COLOR)
                     for file in file_list]
@@ -122,7 +123,8 @@ def detect_via_api(request: Request,
     '''
 
     if model_dict[model_name] is None:
-        model_dict[model_name] = torch.hub.load('ultralytics/yolov5', model_name, pretrained=True)
+        # model_dict[model_name] = torch.hub.load('ultralytics/yolov5', model_name, pretrained=True)
+        model_dict[model_name] = torch.hub.load('ultralytics/yolov5', 'custom', path='/apps/best.pt')
     
     img_batch = [cv2.imdecode(np.fromstring(file.file.read(), np.uint8), cv2.IMREAD_COLOR)
                 for file in file_list]
@@ -201,8 +203,10 @@ if __name__ == '__main__':
     opt = parser.parse_args()
 
     if opt.precache_models:
-        model_dict = {model_name: torch.hub.load('ultralytics/yolov5', model_name, pretrained=True) 
-                        for model_name in model_selection_options}
+        # model_dict = {model_name: torch.hub.load('ultralytics/yolov5', model_name, pretrained=True) 
+        #                 for model_name in model_selection_options}
+        model_dict = {model_name: torch.hub.load('ultralytics/yolov5', 'custom', path='/apps/best.pt')
+                        for model_name in model_selection_options}                        
     
     app_str = 'server:app' #make the app string equal to whatever the name of this file is
     uvicorn.run(app_str, host= opt.host, port=opt.port, reload=True)

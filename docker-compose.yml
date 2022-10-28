@@ -1,0 +1,24 @@
+version: '3.3'
+services:
+  core-api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "11013:8000"
+    volumes:
+      - "./apps:/app"
+    container_name: uniday-yolov5-api
+    command: python server.py --host 0.0.0.0
+    stdin_open: true
+    tty: true
+    # env_file:
+    #   - .env
+    networks:
+      - backend
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  backend:
+    driver: bridge
